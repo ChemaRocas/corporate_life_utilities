@@ -1,0 +1,31 @@
+[project]
+name = "corporate-life-utilities"
+version = "0.1.0"
+description = "Small local tools that replace data-hungry websites and repetitive tasks."
+requires-python = ">=3.12"
+# Nothing is shared between the tools, so the base install is empty. Each tool's
+# libraries are an extra, so installing one tool doesn't pull in another's: the
+# background remover alone brings ~2 GB of image models on first use. Each tool's
+# folder also keeps its own requirements.txt for people who only copy that folder.
+dependencies = []
+
+[project.optional-dependencies]
+pdf = ["pikepdf>=10.17"]
+background = ["rembg[cpu]>=2.0.85", "pillow>=12.3"]
+# For upcoming data/analysis tools. Lower bounds are one set pip resolved together
+# on Python 3.14 (2026-10-19); their own dependencies (contourpy, fonttools,
+# python-dateutil...) are left to pip so they don't need updating by hand.
+data = ["pandas>=3.0.6", "numpy>=2.5.4", "matplotlib>=3.11.2", "seaborn>=0.13.2"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+# The tools are standalone scripts run as `python3 <tool>/<script>.py`, not an
+# importable package. Declaring no packages lets `pip install ".[background]"`
+# install just the libraries instead of failing on the folder layout.
+[tool.setuptools]
+packages = []
+
+[tool.ruff]
+line-length = 100
